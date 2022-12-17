@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import OrangeButton from '../components/OrangeButton';
 import { next } from '../store/modules/mbti';
@@ -17,6 +17,28 @@ const SubHeader = styled.p`
 
 export default function Start() {
   const dispatch = useDispatch();
+
+  async function mongoFetchData() {
+    const resMongoCount = await fetch('http://localhost:4000/mongo/count');
+    if (resMongoCount.status === 200) {
+      const counts = await resMongoCount.json();
+      console.log(counts);
+    } else {
+      throw new Error('방문자 수 통신 이상');
+    }
+
+    const resMongoData = await fetch('http://localhost:4000/mongo/getdata');
+    if (resMongoData.status === 200) {
+      const data = await resMongoData.json();
+      console.log(data);
+    } else {
+      throw new Error('데이터 통신 이상');
+    }
+  }
+  useEffect(() => {
+    // 데이터 받아오기
+    mongoFetchData();
+  }, []);
 
   return (
     <>
