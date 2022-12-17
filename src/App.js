@@ -1,4 +1,7 @@
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import GlobalStyle from './components/GlobalStyle';
+import Mbti from './pages/Mbti';
 import Start from './pages/Start';
 
 const Main = styled.main`
@@ -10,10 +13,12 @@ const Main = styled.main`
   text-align: center;
 `;
 function App() {
+  const page = useSelector((state) => state.mbti.page);
   return (
-    <Main>
-      <Start />
-    </Main>
+    <>
+      <GlobalStyle />
+      <Main>{page === 0 ? <Start /> : <Mbti />}</Main>
+    </>
   );
 }
 
