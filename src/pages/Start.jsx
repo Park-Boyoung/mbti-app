@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import OrangeButton from '../components/OrangeButton';
-import { next } from '../store/modules/mbti';
+import { init, next } from '../store/modules/mbti';
 import { useDispatch } from 'react-redux';
 
 const MainImg = styled.img`
@@ -31,7 +31,7 @@ export default function Start() {
     const resMongoData = await fetch('http://localhost:4000/mongo/getdata');
     if (resMongoData.status === 200) {
       const data = await resMongoData.json();
-      console.log(data);
+      if (data.length !== 0) dispatch(init(data[0]));
     } else {
       throw new Error('데이터 통신 이상');
     }

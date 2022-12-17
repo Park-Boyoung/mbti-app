@@ -129,12 +129,27 @@ const initState = {
   },
 };
 
+const initStateEmpty = {
+  mbtiResult: '',
+  page: 0,
+  survey: [],
+  explaination: {},
+};
+
 // 액션 타입 설정
+const INIT = 'mbti/INIT';
 const CHECK = 'mbti/CHECK';
 const NEXT = 'mbti/NECT';
 const RESET = 'mbti/RESET';
 
 // 액션 생성 합수 설정
+export function init(payload) {
+  return {
+    type: INIT,
+    payload,
+  };
+}
+
 export function check(result) {
   return {
     type: CHECK,
@@ -155,8 +170,14 @@ export function reset() {
 }
 
 // 리듀서 설정
-export default function mbti(state = initState, action) {
+export default function mbti(state = initStateEmpty, action) {
   switch (action.type) {
+    case INIT:
+      return {
+        ...state,
+        survey: action.payload.survey,
+        explaination: action.payload.explaination,
+      };
     case CHECK:
       return {
         ...state,
