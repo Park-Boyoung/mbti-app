@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import OrangeButton from '../components/OrangeButton';
 import { next } from '../store/modules/mbti';
@@ -16,13 +16,14 @@ const SubHeader = styled.p`
 `;
 
 export default function Start() {
+  const [counts, setCounts] = useState(0);
   const dispatch = useDispatch();
 
   async function mongoFetchData() {
     const resMongoCount = await fetch('http://localhost:4000/mongo/count');
     if (resMongoCount.status === 200) {
-      const counts = await resMongoCount.json();
-      console.log(counts);
+      const numOfCounts = await resMongoCount.json();
+      if (numOfCounts.length !== 0) setCounts(numOfCounts[0].counts);
     } else {
       throw new Error('방문자 수 통신 이상');
     }
@@ -45,7 +46,8 @@ export default function Start() {
       <Header>개발자 MBTI 조사</Header>
       <MainImg src="/images/common.jpeg" alt="main img" />
       <SubHeader>
-        개발자가 흔히 접하는 상황에 따라서 MBTI를 알아봅시다.
+        개발자가 흔히 접하는 상황에 따라서 MBTI를 알아봅시다. 지금까지{'\n\n'}
+        {counts}명이 참여해주셨습니다.
       </SubHeader>
       <OrangeButton text="테스트 시작" clickEvent={() => dispatch(next())} />
     </>
